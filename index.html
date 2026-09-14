@@ -90,6 +90,10 @@
         </section>
 
         <div class="ad-container"><!-- AD_FOOTER --> [ ADVERTISEMENT DISPLAY UNIT ] </div>
+        
+        <div style="text-align: center; margin-top: 20px; padding-bottom: 20px;">
+            <a href="privacy.html" style="color: #94a3b8; text-decoration: none; font-size: 0.9rem;">Privacy Policy</a>
+        </div>
     </div>
 
     <script>
@@ -97,7 +101,6 @@
         let currentQrUrl = '';
         let shortLabelText = '';
 
-        // Function to extract short clean domain or text
         function getShortLabel(text) {
             try {
                 if (text.startsWith('http://') || text.startsWith('https://')) {
@@ -124,7 +127,6 @@
             stage.style.display = 'block';
         }
 
-        // Draw Canvas to include Frame, QR, and Short Text into ONE downloadable image file
         function downloadCombinedImage() {
             const imgElement = document.getElementById('qrImage');
             if (!imgElement) return;
@@ -139,19 +141,16 @@
             canvas.width = qrSize + (padding * 2);
             canvas.height = qrSize + (padding * 2) + captionHeight;
 
-            // White Background Card
             ctx.fillStyle = '#ffffff';
             ctx.roundRect ? ctx.roundRect(0, 0, canvas.width, canvas.height, 20) : ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fill();
 
-            // Draw QR Code Image
             const tempImg = new Image();
             tempImg.crossOrigin = 'anonymous';
             tempImg.src = currentQrUrl;
             tempImg.onload = function() {
                 ctx.drawImage(tempImg, padding, padding, qrSize, qrSize);
 
-                // Draw Gray Badge Box for Text
                 const badgeY = padding + qrSize + 12;
                 ctx.fillStyle = '#f1f5f9';
                 if(ctx.roundRect) {
@@ -162,14 +161,12 @@
                     ctx.fillRect(padding, badgeY, qrSize, 36);
                 }
 
-                // Write Short Label Text inside Badge
                 ctx.fillStyle = '#0f172a';
                 ctx.font = 'bold 16px "Space Grotesk", sans-serif';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText(shortLabelText, canvas.width / 2, badgeY + 18);
 
-                // Trigger Download
                 const link = document.createElement('a');
                 link.download = `QR_${shortLabelText.replace(/[^a-zA-Z0-9]/g, '_')}.png`;
                 link.href = canvas.toDataURL('image/png');
